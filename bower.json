@@ -1,0 +1,19 @@
+{
+  "name": "MeaningfulJS",
+  "version": "0.1.0",
+  "description": "MeaningfulJS is a simple, sane MEAN stack.",
+  "author": "Scott Davis <scott@thirstyhead.com>",
+  "license": "Apache 2.0",
+  "ignore": [
+    "node_modules",
+    "bower_components"
+  ],
+  "devDependencies": {
+    "jasmine": "~2.3.4",
+    "angular-mocks": "~1.4.0"
+  },
+  "dependencies": {
+    "angular": "~1.4.0",
+    "bootstrap": "~3.3.4"
+  }
+}
