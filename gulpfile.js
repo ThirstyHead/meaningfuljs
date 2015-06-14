@@ -24,8 +24,16 @@ dir.protractor = dir.src + '/protractor';
 dir.bower = './bower_components';
 
 var src = {};
+src.index = [dir.client + '/index.html'];
+src.specRunner = [dir.client + '/specs.html'];  
 src.html = [dir.client + '/**/*.html']; 
 src.css = [dir.client + '/**/*.css'];
+src.img = [
+    dir.client + '/**/*.png',
+    dir.client + '/**/*.jpg',
+    dir.client + '/**/*.gif'
+];
+src.favicon = [dir.client + '/favicon.ico'];
 src.js = [dir.client + '/**/*.js'];
 src.less = [
     dir.client + '/**/*.less',
@@ -36,6 +44,7 @@ src.protractor = [dir.protractor + '/**/*.spec.js'];
 var build = {};
 build.html = dir.build;
 build.css = dir.build + '/css';
+build.img = dir.build + '/img';
 build.js = dir.build + '/js';
 build.allExceptTests = [
    dir.build + '/**/*.*',
@@ -46,6 +55,7 @@ build.allExceptTests = [
 var dist = {};
 dist.html = dir.dist;
 dist.css = dir.dist + '/css';
+dist.img = dir.dist + '/img';
 dist.js = dir.dist + '/js';
 
 var reports = {};
@@ -68,14 +78,14 @@ gulp.task('default',
  */
 gulp.task('build', 
           'Builds runnable website (dev-mode)', 
-          ['build-js', 'build-css'],
+          ['build-js', 'build-css', 'build-img', 'build-favicon'],
           function(){
     // NOTE: wiredep is for bower_components
     //       These custom options strip the leading
     //       relative path (/../../) off         
     var wiredepOptions = {
         dependencies: true,
-        devDependencies: true,
+        devDependencies: false,
         ignorePath: /^\/|(\.\.\/){1,2}/,
         fileTypes:{
             html: {
@@ -92,30 +102,29 @@ gulp.task('build',
                              {cwd: __dirname + '/build'})
                         .pipe(gulpPlugin.angularFilesort());
 
+    var injectJsNoTests = gulp.src(['./**/*.js', '!./**/*.spec.js'], 
+                             {cwd: __dirname + '/build'})
+                        .pipe(gulpPlugin.angularFilesort());
+
     var injectCss = gulp.src(['./**/*.css'], 
                              {cwd: __dirname + '/build'});
 
-    return gulp.src(src.html)             
+    // inject index.html    
+    gulp.src(src.index)
+        .pipe(wiredep(wiredepOptions))
+        .pipe(gulpPlugin.inject(injectJsNoTests))
+        .pipe(gulpPlugin.inject(injectCss))
+        .pipe(gulp.dest(build.html));
+
+    // inject specs.html
+    // NOTE: add in devDependencies as well        
+    wiredepOptions.devDependencies = true;
+
+    return gulp.src(src.specRunner)
                .pipe(wiredep(wiredepOptions))
                .pipe(gulpPlugin.inject(injectJs))
                .pipe(gulpPlugin.inject(injectCss))
                .pipe(gulp.dest(build.html));
-});
-
-/** 
- * Builds JS
- */
-gulp.task('build-js', 
-          hideTask, 
-          function() {
-    return gulp.src(src.js)
-               .pipe(gulpPlugin.jshint())
-               .pipe(gulpPlugin.jshint.reporter('jshint-stylish', {verbose: true}))
-               .pipe(gulpPlugin.jshint.reporter('fail'))
-               .pipe(gulpPlugin.jscs())
-               // .pipe(gulpPlugin.concat('app.js'))
-               // .pipe(gulpPlugin.uglify())
-               .pipe(gulp.dest(build.js));
 });
 
 /**
@@ -133,6 +142,44 @@ gulp.task('build-css',
                .pipe(gulpPlugin.less())
                .pipe(gulpPlugin.autoprefixer({browsers: ['last 2 version', '> 5%']}))
                .pipe(gulp.dest(build.css));
+});
+
+/**
+ * Builds favicon
+ */
+gulp.task('build-favicon', 
+          hideTask, 
+          function() {
+
+    return gulp.src(src.favicon)
+               .pipe(gulp.dest(build.html));
+});
+
+/**
+ * Builds images
+ */
+gulp.task('build-img', 
+          hideTask, 
+          function() {
+
+    return gulp.src(src.img)
+               .pipe(gulp.dest(build.img));
+});
+
+/** 
+ * Builds JS
+ */
+gulp.task('build-js', 
+          hideTask, 
+          function() {
+    return gulp.src(src.js)
+               .pipe(gulpPlugin.jshint())
+               .pipe(gulpPlugin.jshint.reporter('jshint-stylish', {verbose: true}))
+               .pipe(gulpPlugin.jshint.reporter('fail'))
+               .pipe(gulpPlugin.jscs())
+               // .pipe(gulpPlugin.concat('app.js'))
+               // .pipe(gulpPlugin.uglify())
+               .pipe(gulp.dest(build.js));
 });
 
 /** 
