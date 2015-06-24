@@ -7,6 +7,7 @@ var del = require('del');
 var plato = require('plato');
 var browserSync = require('browser-sync');
 var wiredep = require('wiredep').stream;
+var lodash = require('lodash');
 
 // Testing Modules
 var selenium = require('selenium-standalone');
@@ -109,6 +110,10 @@ gulp.task('build',
     var injectCss = gulp.src(['./**/*.css'], 
                              {cwd: __dirname + '/build'});
 
+    // copy over all html
+    gulp.src(src.html)
+        .pipe(gulp.dest(build.html));
+
     // inject index.html    
     gulp.src(src.index)
         .pipe(wiredep(wiredepOptions))
@@ -118,10 +123,12 @@ gulp.task('build',
 
     // inject specs.html
     // NOTE: add in devDependencies as well        
-    wiredepOptions.devDependencies = true;
-
+    var testOptions = {};
+    lodash.merge(testOptions, wiredepOptions);
+    testOptions.devDependencies = true;
+    
     return gulp.src(src.specRunner)
-               .pipe(wiredep(wiredepOptions))
+               .pipe(wiredep(testOptions))
                .pipe(gulpPlugin.inject(injectJs))
                .pipe(gulpPlugin.inject(injectCss))
                .pipe(gulp.dest(build.html));
@@ -137,6 +144,11 @@ gulp.task('build-css',
     //            .pipe(gulpPlugin.concat('app.css'))
     //            .pipe(gulp.dest(build.css));
 
+    // copy css from src to build 
+    gulp.src(src.css)
+        .pipe(gulp.dest(dir.build));
+
+    // build less
     return gulp.src(src.less)
                .pipe(gulpPlugin.plumber())
                .pipe(gulpPlugin.less())

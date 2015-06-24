@@ -1,7 +1,7 @@
 {
-  "name": "MeaningfulJS",
+  "name": "MediaHub",
   "version": "0.1.0",
-  "description": "MeaningfulJS is a simple, sane MEAN stack.",
+  "description": "MediaHub keeps track of all of the media in your life",
   "author": "Scott Davis <scott@thirstyhead.com>",
   "license": "Apache 2.0",
   "ignore": [
@@ -10,10 +10,30 @@
   ],
   "devDependencies": {
     "jasmine": "~2.3.4",
-    "angular-mocks": "~1.4.0"
+    "angular-mocks": "~1.4.1"
   },
   "dependencies": {
-    "angular": "~1.4.0",
-    "bootstrap": "~3.3.4"
+    "angular": "~1.4.1",
+    "bootstrap": "~3.3.4",
+    "angular-new-router": "~0.5.3",
+    "angular-resource": "~1.4.1",
+    "angular-bootstrap": "~0.13.0",
+    "lodash": "~3.9.3"
+  },
+  "overrides": {
+    "angular-new-router": {
+      "main": "dist/router.es5.js"
+    },
+    "bootstrap": {
+      "main": [
+        "dist/css/bootstrap.css",
+        "dist/js/bootstrap.js"
+      ]
+    },
+    "angular": {
+      "dependencies": {
+        "lodash": "~3.9.3"
+      }
+    }
   }
 }

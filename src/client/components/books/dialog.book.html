@@ -1,0 +1,48 @@
+<div>
+    <div class="modal-header">
+        <h3 class="modal-title">{{book.title}}</h3>
+    </div>
+    <div name="modalForm" 
+         ng-form 
+         class="modal-body">
+        <fieldset>
+            <div class="form-group required">
+                <label for="book.title"
+                       class="control-label">Title</label>
+                <input type="text" 
+                       id="book.title"
+                       ng-model="book.title"                        
+                       class="form-control" required></input>
+            </div>
+
+            <div class="form-group">
+                <label for="book.author"
+                       class="control-label">Author</label>
+                <input type="text" 
+                       id="book.author"
+                       ng-model="book.author"                        
+                       class="form-control"></input>
+            </div>
+
+            <div class="form-group">
+                <label for="book.publisher"
+                       class="control-label">Publisher</label>
+                <input type="text" 
+                       id="book.publisher"
+                       ng-model="book.publisher"                        
+                       class="form-control"></input>
+            </div>
+
+            <div class="form-group pull-right">
+                <button id="okButton"
+                        ng-click="ok()"
+                        data-ng-disabled="modalForm.$invalid" 
+                        class="btn btn-primary">OK</button>
+
+                <button id="cancelButton" 
+                        ng-click="cancel()"
+                        class="btn btn-warning">Cancel</button>
+            </div>
+        </fieldset>
+    </div>
+</div>

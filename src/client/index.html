@@ -4,7 +4,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
 
-    <title>YOUR TITLE</title>
+    <title>MediaHub</title>
 
     <!-- bower:css -->
     <!-- endbower -->
@@ -21,8 +21,9 @@
     <!-- endinject --> 
       
 </head>
-<body ng-app='app'>
-    <h1>MeaningfulJS</h1>
-    <div ng-viewport></div>
+<body ng-app="app" ng-controller="AppController as app">
+    <div class="container-fluid">
+        <div ng-viewport="main"></div>
+    </div>
 </body>
 </html>

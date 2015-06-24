@@ -1,0 +1,92 @@
+# Example YAML to get you started quickly.
+# Be aware that YAML has indentation based scoping.
+# Code completion support is available so start typing for available options.
+swagger: '2.0'
+
+# This is your document metadata
+info:
+  version: "0.1.0"
+  title: MediaHub
+  description: All of your media in one place
+
+consumes:
+  - application/json
+produces:
+  - application/json
+
+# Definitions defines datatypes
+definitions:
+  Book:
+    properties:
+      id:
+        type: integer
+      title:
+        type: string
+      author:
+        type: string
+      publisher:
+        type: string
+
+# Parameters used in multiple paths
+parameters:
+  bookId:
+    name: bookId
+    in: path
+    description: ID of the `Book`
+    required: true
+    type: integer
+
+# Describe your paths here
+paths:
+  /books:
+    get:
+      description: Gets an array of `Book` objects.
+      responses:
+        200:
+          description: Successful response
+          schema:
+            type: array
+            items:
+              $ref: '#/definitions/Book'
+    post:
+      description: Saves a new `Book`
+      parameters:
+        - name: book
+          in: body
+          description: The `Book` to be added
+          required: true
+          schema:
+            $ref: '#/definitions/Book'
+      responses:
+        201:
+          description: Successful POST
+
+  /books/{bookId}:
+    parameters: 
+      - $ref: '#/parameters/bookId'
+    get:
+      description: Gets an individual `Book` uniquely identified by `bookId`
+      responses:
+        200:
+          description: Successful response
+          schema:
+            $ref: '#/definitions/Book'
+
+    put:
+      description: Updates a `Book`
+      parameters:
+        - name: book
+          in: body
+          description: The `Book` to be updated
+          required: true
+          schema:
+            $ref: '#/definitions/Book'
+      responses:
+        204:
+          description: Successful update
+
+    delete:
+      description: Deletes a `Book`
+      responses:
+        204:
+          description: Successful delete

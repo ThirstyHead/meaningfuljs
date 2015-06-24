@@ -1,0 +1,14 @@
+[
+    {
+        "_id": 98,
+        "title": "Getting Started with Gulp",
+        "author": "Travis Maynard",
+        "publisher": "Packt"
+    },
+    {
+        "_id": 99,
+        "title": "Mongoose for Application Development",
+        "author": "Simon Holmes",
+        "publisher": "Packt"
+    }
+]
