@@ -1,0 +1,18 @@
+{
+  "books": [
+    {
+      "id": 1,
+      "_id": 1,
+      "title": "MEAN Web Development",
+      "author": "Amos Haviv",
+      "publisher": "Packt"
+    },
+    {
+      "id": 2,
+      "_id": 2,
+      "title": "Getting MEAN",
+      "author": "Simon Holmes",
+      "publisher": "Manning"
+    }
+  ]
+}
