@@ -1,7 +1,7 @@
 {
-  "name": "MediaHub",
+  "name": "meaningfuljs",
   "version": "0.1.0",
-  "description": "MediaHub keeps track of all of the media in your life",
+  "description": "MeaningfulJS is a simple, sane MEAN stack.",
   "author": "Scott Davis <scott@thirstyhead.com>",
   "license": "Apache 2.0",
   "scripts": {
