@@ -7,8 +7,8 @@
 
     BooksService.$inject = ['$resource'];
     function BooksService($resource) {
-        return $resource('mock/books/:id',
-        // return $resource('books/:id',
+        return $resource('/mock/books/:id',
+        // return $resource('/swagger/books/:id',
                          {id: '@_id'},
                          {update: {method: 'PUT'}});
     }

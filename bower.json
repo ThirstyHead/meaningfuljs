@@ -19,7 +19,7 @@
     "angular-new-router": "~0.5.3",
     "angular-resource": "~1.4.1",
     "angular-bootstrap": "~0.13.0",
-    "lodash": "~3.9.3"
+    "lodash": "~3.10.1"
   },
   "overrides": {
     "angular-new-router": {
@@ -33,7 +33,7 @@
     },
     "angular": {
       "dependencies": {
-        "lodash": "~3.9.3"
+        "lodash": "~3.10.1"
       }
     }
   }

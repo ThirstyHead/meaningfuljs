@@ -35,7 +35,7 @@ function BooksController($modal, $window, Book) {
 
     function openDialog(obj, mode) {
         var modalInstance = $modal.open({
-            templateUrl: '/components/books/dialog.book.html',
+            templateUrl: 'components/books/dialog.book.html',
             controller: 'DialogBookController',
             animation: false,
             size: 'med',
