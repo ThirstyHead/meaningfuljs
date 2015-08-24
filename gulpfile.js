@@ -26,8 +26,8 @@ dir.bower = './bower_components';
 
 var src = {};
 src.index = [dir.client + '/index.html'];
-src.specRunner = [dir.client + '/specs.html'];  
-src.html = [dir.client + '/**/*.html']; 
+src.specRunner = [dir.client + '/specs.html'];
+src.html = [dir.client + '/**/*.html'];
 src.css = [dir.client + '/**/*.css'];
 src.img = [
     dir.client + '/**/*.png',
@@ -36,6 +36,7 @@ src.img = [
 ];
 src.favicon = [dir.client + '/favicon.ico'];
 src.js = [dir.client + '/**/*.js'];
+src.json = [dir.client + '/**/*.json'];
 src.less = [
     dir.client + '/**/*.less',
     dir.bower + '/theme/less/theme.less'
@@ -50,7 +51,7 @@ build.js = dir.build + '/js';
 build.allExceptTests = [
    dir.build + '/**/*.*',
    '!' + dir.build + '/**.spec.js',
-   '!' + dir.build + '/specs.html' 
+   '!' + dir.build + '/specs.html'
 ];
 
 var dist = {};
@@ -64,26 +65,30 @@ reports.protractor = dir.reports + '/protractor';
 
 //NOTE: this hides tasks from 'gulp help',
 //      but leaves them runnable as dependent tasks
-var hideTask = false; 
+var hideTask = false;
 
 
 /**
  * Default task
  */
-gulp.task('default', 
-          '*** Default task ***', 
+gulp.task('default',
+          '*** Default task ***',
           ['help']);
 
 /**
  * Builds runnable website
  */
-gulp.task('build', 
-          'Builds runnable website (dev-mode)', 
-          ['build-js', 'build-css', 'build-img', 'build-favicon'],
+gulp.task('build',
+          'Builds runnable website (dev-mode)',
+          ['build-js',
+           'build-css',
+           'build-img',
+           'build-favicon',
+           'build-json'],
           function(){
     // NOTE: wiredep is for bower_components
     //       These custom options strip the leading
-    //       relative path (/../../) off         
+    //       relative path (/../../) off
     var wiredepOptions = {
         dependencies: true,
         devDependencies: false,
@@ -99,22 +104,22 @@ gulp.task('build',
     };
 
     // NOTE: gulp-inject is for our app / custom code
-    var injectJs = gulp.src(['./**/*.js'], 
+    var injectJs = gulp.src(['./**/*.js'],
                              {cwd: __dirname + '/build'})
                         .pipe(gulpPlugin.angularFilesort());
 
-    var injectJsNoTests = gulp.src(['./**/*.js', '!./**/*.spec.js'], 
+    var injectJsNoTests = gulp.src(['./**/*.js', '!./**/*.spec.js'],
                              {cwd: __dirname + '/build'})
                         .pipe(gulpPlugin.angularFilesort());
 
-    var injectCss = gulp.src(['./**/*.css'], 
+    var injectCss = gulp.src(['./**/*.css'],
                              {cwd: __dirname + '/build'});
 
     // copy over all html
     gulp.src(src.html)
         .pipe(gulp.dest(build.html));
 
-    // inject index.html    
+    // inject index.html
     gulp.src(src.index)
         .pipe(wiredep(wiredepOptions))
         .pipe(gulpPlugin.inject(injectJsNoTests))
@@ -122,11 +127,11 @@ gulp.task('build',
         .pipe(gulp.dest(build.html));
 
     // inject specs.html
-    // NOTE: add in devDependencies as well        
+    // NOTE: add in devDependencies as well
     var testOptions = {};
     lodash.merge(testOptions, wiredepOptions);
     testOptions.devDependencies = true;
-    
+
     return gulp.src(src.specRunner)
                .pipe(wiredep(testOptions))
                .pipe(gulpPlugin.inject(injectJs))
@@ -137,14 +142,11 @@ gulp.task('build',
 /**
  * Builds CSS
  */
-gulp.task('build-css', 
-          hideTask, 
+gulp.task('build-css',
+          hideTask,
           function() {
-    // return gulp.src(src.css)
-    //            .pipe(gulpPlugin.concat('app.css'))
-    //            .pipe(gulp.dest(build.css));
 
-    // copy css from src to build 
+    // copy css from src to build
     gulp.src(src.css)
         .pipe(gulp.dest(dir.build));
 
@@ -159,8 +161,8 @@ gulp.task('build-css',
 /**
  * Builds favicon
  */
-gulp.task('build-favicon', 
-          hideTask, 
+gulp.task('build-favicon',
+          hideTask,
           function() {
 
     return gulp.src(src.favicon)
@@ -170,19 +172,19 @@ gulp.task('build-favicon',
 /**
  * Builds images
  */
-gulp.task('build-img', 
-          hideTask, 
+gulp.task('build-img',
+          hideTask,
           function() {
 
     return gulp.src(src.img)
                .pipe(gulp.dest(build.img));
 });
 
-/** 
+/**
  * Builds JS
  */
-gulp.task('build-js', 
-          hideTask, 
+gulp.task('build-js',
+          hideTask,
           function() {
     return gulp.src(src.js)
                .pipe(gulpPlugin.jshint())
@@ -194,11 +196,24 @@ gulp.task('build-js',
                .pipe(gulp.dest(build.js));
 });
 
-/** 
+/**
+ * Builds JSON
+ */
+gulp.task('build-json',
+          hideTask,
+          function() {
+
+    return gulp.src(src.json)
+               .pipe(gulpPlugin.jsonlint())
+               .pipe(gulpPlugin.jsonlint.reporter())
+               .pipe(gulp.dest(dir.build));
+});
+
+/**
  * Deletes generated artifacts
  */
-gulp.task('clean', 
-          'Deletes generated artifacts', 
+gulp.task('clean',
+          'Deletes generated artifacts',
           function(cb) {
     del.sync([dir.build, dir.dist, dir.reports]);
     return cb();
@@ -207,8 +222,8 @@ gulp.task('clean',
 /**
  * Builds production website
  */
-gulp.task('dist', 
-          'Builds production website (prod-mode)', 
+gulp.task('dist',
+          'Builds production website (prod-mode)',
           ['clean', 'build'],
           function(){
     return gulp.src(build.allExceptTests)
@@ -219,8 +234,8 @@ gulp.task('dist',
  * Keeps web server up and running
  * Called by 'run' task
  */
-gulp.task('nodemon', 
-           hideTask, 
+gulp.task('nodemon',
+           hideTask,
            function(cb) {
 
     // We use this `called` variable to make sure the callback is only executed once
@@ -229,8 +244,8 @@ gulp.task('nodemon',
     var nodemonOptions = {
         port: port,
         script: dir.server + '/server.js',
-        watch: [dir.server + '/server.js', 
-                dir.build + '/**/*.*']        
+        watch: [dir.server + '/server.js',
+                dir.build + '/**/*.*']
     };
 
     return gulpPlugin.nodemon(nodemonOptions)
@@ -263,8 +278,8 @@ gulp.task('nodemon',
 /**
  * Create a visualizer report
  */
-gulp.task('plato', 
-          hideTask, 
+gulp.task('plato',
+          hideTask,
           ['clean', 'build'],
           function(done) {
     console.log('Analyzing source with Plato');
@@ -275,16 +290,16 @@ gulp.task('plato',
         exclude: /.*\.spec\.js/
     };
 
-    plato.inspect([build.js + '/**/*.js'], 
-                  dir.reports + '/plato/', 
-                  options, 
+    plato.inspect([build.js + '/**/*.js'],
+                  dir.reports + '/plato/',
+                  options,
                   platoCompleted);
 
     function platoCompleted(report) {
         var overview = plato.getOverviewReport(report);
         console.log(overview.summary);
-        if (done) { 
-            done(); 
+        if (done) {
+            done();
         }
     }
 });
@@ -292,8 +307,8 @@ gulp.task('plato',
 /**
  * Runs Protractor tests (browser acceptance tests)
  */
-gulp.task('protractor', 
-          hideTask, 
+gulp.task('protractor',
+          hideTask,
           function(){
     del.sync([reports.protractor]);
 
@@ -316,9 +331,9 @@ gulp.task('protractor',
 /**
  * Runs website (dev-mode)
  */
-gulp.task('run', 
+gulp.task('run',
           'Runs website (dev-mode)',
-          ['nodemon'], 
+          ['nodemon'],
           function(){
 
     var port = process.env.PORT || 3000;
@@ -347,12 +362,12 @@ gulp.task('run',
 /**
  * Runs Selenium server (for Protractor tests)
  */
-gulp.task('selenium', 
-          hideTask, 
+gulp.task('selenium',
+          hideTask,
           function (done) {
 
     // NOTE: this redirects Selenium server output
-    //       from std.err to std.out            
+    //       from std.err to std.out
     var seleniumOptions = {
         spawnOptions: {
             stdio: 'inherit'
@@ -360,16 +375,16 @@ gulp.task('selenium',
     };
 
     var seleniumInstallOptions = {
-        logger: function (message) { 
+        logger: function (message) {
             console.log(message);
         }
     };
 
-    selenium.install(seleniumInstallOptions, 
+    selenium.install(seleniumInstallOptions,
                      function (err) {
         if (err) { return done(err); }
 
-        selenium.start(seleniumOptions, 
+        selenium.start(seleniumOptions,
                        function (err, child) {
             if (err) { return done(err); }
             selenium.child = child;
