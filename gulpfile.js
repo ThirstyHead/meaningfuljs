@@ -423,62 +423,10 @@ gulp.task('nodemon',
            });
 
 /**
- * Keeps web server up and running
- * Called by 'run-dist' task
- */
-gulp.task('nodemon-dist',
-          hideTask,
-          function(cb) {
-              // We use this `called` variable to make sure the callback is only executed once
-              var called = false;
-              process.env.NODE_ENV = 'production';
-              var port = process.env.PORT || 3000;
-              var nodemonOptions = {
-                  port: port,
-                  script: dir.server + '/server.js',
-                  watch: [dir.server + '/server.js',
-                          dir.build + '/**/*.*']
-              };
-
-              return gulpPlugin.nodemon(nodemonOptions)
-                  .on('start', function onStart() {
-                      console.log('*** nodemon started');
-                      if (!called) {
-                          // Also reload the browsers after a slight delay
-                          setTimeout(function reload() {
-                              browserSync.notify('reloading now ...');
-                              browserSync.reload({
-                                  stream: false
-                              });
-                              cb();
-                          }, 1000);
-                      }
-                      called = true;
-                  })
-                  .on('restart', function onRestart() {
-                      console.log('*** nodemon restarted');
-
-                      // Also reload the browsers after a slight delay
-                      setTimeout(function reload() {
-                          browserSync.notify('reloading now ...');
-                          browserSync.reload({
-                              stream: false
-                          });
-                      }, 1000);
-                  })
-                  .on('crash', function () {
-                      console.log('*** nodemon crashed: script crashed for some reason');
-                  })
-                  .on('exit', function () {
-                      console.log('*** nodemon exited cleanly');
-                  });
-          });
-
-/**
  * Create a visualizer report
  */
 gulp.task('plato',
-          hideTask,
+          'Runs Plato report on the project',
           ['clean', 'build'],
           function(done) {
     console.log('Analyzing source with Plato');
