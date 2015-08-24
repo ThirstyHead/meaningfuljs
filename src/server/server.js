@@ -96,8 +96,10 @@ middleware.init(swaggerFile.yaml, function(err) {
 // json-server gives us full CRUD RESTful endpoints
 // based on static JSON in mockdb.json in the root
 // of the project.
-var mockJsonRouter = jsonServer.router('mockdb.json');
-app.use('/mock', mockJsonRouter);
+if(env === 'development'){
+    var mockJsonRouter = jsonServer.router('mockdb.json');
+    app.use('/mock', mockJsonRouter);
+}
 
 // wire swagger RESTful endpoints to MongoDB
 if(env === 'production'){
