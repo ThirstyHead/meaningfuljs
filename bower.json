@@ -4,6 +4,7 @@
   "description": "MeaningfulJS is a simple, sane MEAN stack.",
   "author": "Scott Davis <scott@thirstyhead.com>",
   "license": "Apache 2.0",
+  "main": "src/server/server.js",
   "ignore": [
     "node_modules",
     "bower_components"
@@ -18,7 +19,7 @@
     "angular-new-router": "~0.5.3",
     "angular-resource": "~1.4.1",
     "angular-bootstrap": "~0.13.0",
-    "lodash": "~3.9.3"
+    "lodash": "~3.10.1"
   },
   "overrides": {
     "angular-new-router": {
@@ -32,7 +33,7 @@
     },
     "angular": {
       "dependencies": {
-        "lodash": "~3.9.3"
+        "lodash": "~3.10.1"
       }
     }
   }

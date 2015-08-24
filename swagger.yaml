@@ -9,6 +9,8 @@ info:
   title: MediaHub
   description: All of your media in one place
 
+basePath: "/swagger"
+
 consumes:
   - application/json
 produces:
@@ -62,7 +64,7 @@ paths:
           description: Successful POST
 
   /books/{bookId}:
-    parameters: 
+    parameters:
       - $ref: '#/parameters/bookId'
     get:
       description: Gets an individual `Book` uniquely identified by `bookId`
