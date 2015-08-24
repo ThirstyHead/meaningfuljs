@@ -4,6 +4,7 @@
   "description": "MeaningfulJS is a simple, sane MEAN stack.",
   "author": "Scott Davis <scott@thirstyhead.com>",
   "license": "Apache 2.0",
+  "main": "src/server/server.js",
   "ignore": [
     "node_modules",
     "bower_components"
