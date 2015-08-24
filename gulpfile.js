@@ -507,7 +507,7 @@ gulp.task('plato',
  * Runs Protractor tests (browser acceptance tests)
  */
 gulp.task('protractor',
-          hideTask,
+          'Runs Protractor tests',
           function() {
     del.sync([reports.protractor]);
 
@@ -543,14 +543,15 @@ gulp.task('reset',
  * Runs website (dev-mode)
  */
 gulp.task('run',
-          'Runs website (dev-mode)',
+          'Runs website',
           ['nodemon'],
           function() {
               var port = process.env.PORT || 3000;
               var syncPort = process.env.SYNC_PORT || 4000;
+              var publicDir = (process.env.NODE_ENV === 'production' ? 'dist' : 'build');
               var browserSyncOptions = {
                   // All of the following files will be watched
-                  files: [dir.build + '/**/*.*'],
+                  files: [dir[publicDir] + '/**/*.*'],
 
                   // Tells BrowserSync on where the express app is running
                   proxy: 'http://localhost:' + port + '/' + packageJson.name,
@@ -567,45 +568,14 @@ gulp.task('run',
               // Register a watcher on the src directory for changes,
               // which will update the build directory,
               // which will trigger browserSync + nodemon
-              return gulp.watch(dir.src + '/**/*.*', ['build']);
-          });
-
-/**
- * Runs website (dist-mode)
- */
-gulp.task('run-dist',
-          'Runs website (dist-mode)',
-          ['nodemon-dist'],
-          function() {
-              var port = process.env.PORT || 3000;
-              var syncPort = process.env.SYNC_PORT || 4000;
-              var browserSyncOptions = {
-                  // All of the following files will be watched
-                  files: [dir.dist + '/**/*.*'],
-
-                  // Tells BrowserSync on where the express app is running
-                  proxy: 'http://localhost:' + port + '/' + packageJson.name,
-
-                  // This port should be different from the express app port
-                  port: syncPort,
-
-                  // Which browser should we launch?
-                  browser: ['google chrome']
-              };
-
-              browserSync.init(browserSyncOptions);
-
-              // Register a watcher on the src directory for changes,
-              // which will update the dist directory,
-              // which will trigger browserSync + nodemon
-              return gulp.watch(dir.src + '/**/*.*', ['dist']);
+              return gulp.watch(dir.src + '/**/*.*', [publicDir]);
           });
 
 /**
  * Runs Selenium server (for Protractor tests)
  */
 gulp.task('selenium',
-          hideTask,
+          'Downloads and runs Selenium server',
           function (done) {
               // NOTE: this redirects Selenium server output
               //       from std.err to std.out
