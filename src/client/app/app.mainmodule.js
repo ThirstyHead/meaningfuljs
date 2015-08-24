@@ -17,12 +17,12 @@
     function AppController($router, env) {
         console.log('Environment: ' + env);
         var routes = [
-            {path: '/',
-             as: 'home',
-             components: {'main':'home'}},
-            {path: '/books',
-             as: 'books',
-             components: {'main':'books'}}
+            {'path': '/',
+             'as': 'home',
+             'components': {'main':'home'}},
+            {'path': '/books',
+             'as': 'books',
+             'components': {'main':'books'}}
         ];
 
         $router.config(routes);
