@@ -4,6 +4,34 @@
   "description": "MeaningfulJS is a simple, sane MEAN stack.",
   "author": "Scott Davis <scott@thirstyhead.com>",
   "license": "Apache 2.0",
+  "keywords": [
+    "mean",
+    "mongo",
+    "mongodb",
+    "express",
+    "expressjs",
+    "angular",
+    "angularjs",
+    "node",
+    "nodejs"
+  ],
+  "files": [
+    "src",
+    ".bowerrc",
+    ".editorconfig",
+    ".gitignore",
+    ".jscsrc",
+    ".jshintrc",
+    "LICENSE",
+    "bower.json",
+    "gulpfile.js",
+    "mockdb.json",
+    "swagger.yaml"
+  ],
+  "engines": {
+    "node": ">=0.12.0"
+  },
+  "main": "src/server/server.js",
   "scripts": {
     "init": "npm install",
     "postinstall": "bower install --config.interactive=false"
